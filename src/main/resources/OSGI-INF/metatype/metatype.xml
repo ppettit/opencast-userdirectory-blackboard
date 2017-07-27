@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+
+  <OCD description="BlackboardProvider" name="org.opencastproject.userdirectory.blackboard" id="org.opencastproject.userdirectory.blackboard">
+
+    <AD name="Blackboard Server URL" id="org.opencastproject.userdirectory.blackboard.url" required="true" type="String" default="" />
+    <AD name="Organization ID" id="org.opencastproject.userdirectory.blackboard.org" required="true" type="String" default="mh_default_org" />
+    <AD name="Blackboard User" id="org.opencastproject.userdirectory.blackboard.user" required="false" type="String" default="" />
+    <AD name="Blackboard User Password" id="org.opencastproject.userdirectory.blackboard.password" required="false" type="String" default="" />
+    <AD name="Cache size" id="org.opencastproject.userdirectory.blackboard.cache.size" required="false" type="Integer" default="1000" />
+    <AD name="Cache expiration (minutes)" id="org.opencastproject.userdirectory.blackboard.cache.expiration" required="false" type="Integer" default="60" />
+    <AD name="Blackboard Site ID pattern (regular expression)" id="org.opencastproject.userdirectory.blackboard.site.pattern" required="false" type="String" default="" />
+    <AD name="Blackboard User ID (EID) pattern (regular expression)" id="org.opencastproject.userdirectory.blackboard.user.pattern" required="false" type="String" default="" />
+    <AD name="Blackboard roles mapped to Instructor (comma-separated list)" id="org.opencastproject.userdirectory.blackboard.instructor.roles" required="false" type="String" default="Instructor,Site owner,maintain" />
+
+  </OCD>
+
+  <Designate pid="org.opencastproject.userdirectory.blackboard">
+    <Object ocdref="org.opencastproject.userdirectory.blackboard" />
+  </Designate>
+
+</metatype:MetaData>
