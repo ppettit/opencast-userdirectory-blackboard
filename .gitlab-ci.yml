@@ -46,7 +46,7 @@ buildrpm:
     - echo "%version ${VERSION}" >> "/root/.rpmmacros"
     - echo "%buildno ${CI_JOB_ID}" >> "/root/.rpmmacros"
     - echo "%commit ${CI_COMMIT_SHA}" >> "${HOME}/.rpmmacros"
-    - rpmbuild -ba opencast-keele-timetable-sync.spec
+    - rpmbuild -ba opencast-userdirectory-blackboard.spec
     - cp /root/rpmbuild/RPMS/noarch/*.rpm .
   artifacts:
     name: "${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHA}-RPM"
