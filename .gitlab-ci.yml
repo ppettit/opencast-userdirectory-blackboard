@@ -29,8 +29,6 @@ build:
   stage: build
   script:
     - 'mvn $MAVEN_CLI_OPTS install'
-  only:
-    - master
   artifacts:
     name: "${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHA}"
     paths:
@@ -64,8 +62,8 @@ pushtorepo:testing:
     - export RPM_FILE=`ls opencast-userdirectory-blackboard*rpm`
     - curl -u $KATELLO_USER:$KATELLO_PASS --insecure -X POST "${KATELLO_SERVER}/katello/api/repositories/${KATELLO_TESTING_REPO_ID}/upload_content" -F "content=@${RPM_FILE}"
   image: centos:7
-  only:
-    - master
+#  only:
+#    - master
 
 pushtorepo:stable:
   stage: deploy
@@ -75,6 +73,6 @@ pushtorepo:stable:
     - export RPM_FILE=`ls opencast-userdirectory-blackboard*rpm`
     - curl -u $KATELLO_USER:$KATELLO_PASS --insecure -X POST "${KATELLO_SERVER}/katello/api/repositories/${KATELLO_STABLE_REPO_ID}/upload_content" -F "content=@${RPM_FILE}"
   image: centos:7
-  only:
-    - master
+#  only:
+#    - master
   when: manual
