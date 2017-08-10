@@ -5,6 +5,11 @@
 #
 # * Caches downloaded dependencies and plugins between invocation.
 
+stages:
+  - build
+  - package
+  - deploy
+
 variables:
   # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
@@ -32,3 +37,44 @@ build:
     - target/*.jar
     - etc/
   image: maven:3.3.9-jdk-8
+
+buildrpm:
+  stage: package
+  script:
+    - mkdir -p /root/rpmbuild/SOURCES
+    - cp target/*.jar etc/org.opencastproject.userdirectory.blackboard-default.cfg.template /root/rpmbuild/SOURCES/
+    - yum -y install rpm-build
+    - export VERSION=$(sed -n '0,/^.*<version>\(.*\)<\/version>.*$/s//\1/p' pom.xml)
+    - echo "%version ${VERSION}" >> "/root/.rpmmacros"
+    - echo "%buildno ${CI_JOB_ID}" >> "/root/.rpmmacros"
+    - echo "%commit ${CI_COMMIT_SHA}" >> "${HOME}/.rpmmacros"
+    - rpmbuild -ba opencast-keele-timetable-sync.spec
+    - cp /root/rpmbuild/RPMS/noarch/*.rpm .
+  artifacts:
+    name: "${CI_PROJECT_NAME}_${CI_COMMIT_REF_NAME}_${CI_COMMIT_SHA}-RPM"
+    paths:
+      - opencast-userdirectory-blackboard*.rpm
+  image: centos:7
+
+pushtorepo:testing:
+  stage: deploy
+  dependencies:
+    - buildrpm
+  script:
+    - export RPM_FILE=`ls opencast-userdirectory-blackboard*rpm`
+    - curl -u $KATELLO_USER:$KATELLO_PASS --insecure -X POST "${KATELLO_SERVER}/katello/api/repositories/${KATELLO_TESTING_REPO_ID}/upload_content" -F "content=@${RPM_FILE}"
+  image: centos:7
+  only:
+    - master
+
+pushtorepo:stable:
+  stage: deploy
+  dependencies:
+    - buildrpm
+  script:
+    - export RPM_FILE=`ls opencast-userdirectory-blackboard*rpm`
+    - curl -u $KATELLO_USER:$KATELLO_PASS --insecure -X POST "${KATELLO_SERVER}/katello/api/repositories/${KATELLO_STABLE_REPO_ID}/upload_content" -F "content=@${RPM_FILE}"
+  image: centos:7
+  only:
+    - master
+  when: manual
