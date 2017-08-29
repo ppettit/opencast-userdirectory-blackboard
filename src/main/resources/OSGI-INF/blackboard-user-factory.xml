@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"
- name="org.opencastproject.userdirectory.blackboard.BlackboardUserProviderFactory" immediate="false" activate="activate">
+ name="org.opencastproject.userdirectory.blackboard.BlackboardUserProviderFactory" immediate="true" activate="activate">
   <implementation class="org.opencastproject.userdirectory.blackboard.BlackboardUserProviderFactory" />
   <property name="service.pid" value="org.opencastproject.userdirectory.blackboard" />
   <property name="service.description" value="Provides Blackboard user directory instances" />
