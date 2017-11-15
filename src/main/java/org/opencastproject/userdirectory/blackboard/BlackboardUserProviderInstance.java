@@ -415,7 +415,7 @@ public class BlackboardUserProviderInstance implements UserProvider, RoleProvide
         }
 
         BlackboardPaging paging = memberships.getPaging();
-        if (paging != null) {
+        if (paging != null && memberships.getResults().size() > 0) {
           nextPage = paging.getNextPage();
         } else {
           nextPage = null;
